@@ -1,7 +1,10 @@
 // <block:setup:1>
-const datapoints = [1200, -20, 775, 760, 2560, 6]; //SC:liste soldes
-const DATA_COUNT = datapoints.length + 2;
-const labels = []; //liste des "titres" à chaque montant?
+
+const datapoints = []; //SC:liste soldes
+const DATA_COUNT = datapoints.length; //pourquoi un +2?
+/* on enlève le 2, sinon retourne le titre 2 tps en retard,
+(permet de faire "avancer" le graphique qd pas de valeur dans label?)*/
+const labels = []; //liste des "titres" à chaque montant
 for (let i = 0; i < DATA_COUNT; ++i) {
   labels.push(i.toString());
 }
@@ -52,24 +55,50 @@ const config = {
 };
 
 /*Le contexte du canevas HTML */
-context = document.getElementById("myChart").getContext("2d");
+context = document.getElementById("myChart").getContext("2d"); //permet de cibler le graphique html
 /* Création du graphique */
 chart = new Chart(context, config);
 
 /* Générer des données aléatoires */
 //sc: Cette fonction n'a plus lieu d'être aprèes modif, car chiffres aléatoires vont être remplacés par les données récoltées
-function generateData() {
-  randomTemperature = (Math.random() * Math.floor(50)).toFixed(2); // Deux chiffres après la virgule
-  addTemperature(new Date().toLocaleTimeString(), randomTemperature);
-}
+// function generateData() {
+//   randomTemperature = (Math.random() * Math.floor(50)).toFixed(2); // Deux chiffres après la virgule
+//   addTemperature(new Date().toLocaleTimeString(), randomTemperature);
+// }
 
-function addTemperature(time, temperature) {
-  /* Ajoute la valeur en X */
-  config.data.labels.push(time);
+// /*sc: je ne comprends pas ce que vient faire cette fonction, modèle à suivre pour la suite?
+//       qd on la supprime cela n'a pas d'influence sur le graphique*/
+// function addTemperature(time, temperature) {
+//   /* Ajoute la valeur en X */
+//   config.data.labels.push(time);
 
-  /* Ajoute la valeur */
-  config.data.datasets[0].data.push(temperature);
+//   /* Ajoute la valeur */
+//   config.data.datasets[0].data.push(temperature);
 
-  /* Rafraichir le graphique */
+//   /* Rafraichir le graphique */
+//   chart.update();
+// }
+
+/*on reproduit la fonction qui permet d'obtenir le solde et le titre (car je n'arrive pas à importer mon tableau de valeur),
+ on va l'utiliser pour remplir le tableau datapoints*/
+
+//  let dataMontant;
+// datapoints.push(soldeArray[0]);
+
+selectForm = document.querySelector("#operationForm");
+selectForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  if (soldeArray.length > 0) {
+    let i = soldeArray.length - 1;
+    datapoints.push(soldeArray[i]);
+  }
+
+  console.log(datapoints);
+
+  let dataTitre = document.querySelector("#titre").value;
+  // console.log(dataTitre);
+  labels.push(dataTitre);
+  // console.log(labels);
   chart.update();
-}
+});

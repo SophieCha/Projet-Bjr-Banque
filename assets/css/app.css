@@ -107,3 +107,11 @@ header {
   display: none;
   color: red;
 }
+
+.active {
+  display: block;
+}
+
+.invisible {
+  display: none;
+}
